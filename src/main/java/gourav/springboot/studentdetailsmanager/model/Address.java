@@ -1,4 +1,4 @@
-package gourav.springboot.studentdetailsmanager.model.address;
+package gourav.springboot.studentdetailsmanager.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
