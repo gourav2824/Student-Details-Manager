@@ -18,7 +18,7 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public Address getAddress(Integer id) {
-        return addressRepository.findById(id).orElse(null);
+    public Address getAddress(int addressId) {
+        return addressRepository.findById(addressId).orElse(null);
     }
 }

@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
 
@@ -17,13 +19,13 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @PostMapping("/create-student")
+    @PostMapping("/create")
     public StudentResponse createStudent(@RequestBody CreateStudentRequest createStudentRequest) {
         return studentService.createStudent(createStudentRequest);
     }
 
-    @GetMapping("/student/{id}")
-    public StudentResponse getStudent(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public StudentResponse getStudent(@PathVariable Integer id) {
         return studentService.getStudent(id);
     }
 }
