@@ -13,6 +13,11 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
+    public Address createAddress(String street, String city) {
+        final Address address = new Address(street, city);
+        return addressRepository.save(address);
+    }
+
     public Address getAddress(Integer id) {
         return addressRepository.findById(id).orElse(null);
     }
