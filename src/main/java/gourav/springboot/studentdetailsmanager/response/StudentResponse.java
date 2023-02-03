@@ -1,7 +1,9 @@
 package gourav.springboot.studentdetailsmanager.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class StudentResponse {
     private int id;
