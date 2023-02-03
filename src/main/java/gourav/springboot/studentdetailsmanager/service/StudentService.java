@@ -3,6 +3,7 @@ package gourav.springboot.studentdetailsmanager.service;
 import gourav.springboot.studentdetailsmanager.model.Address;
 import gourav.springboot.studentdetailsmanager.model.Student;
 import gourav.springboot.studentdetailsmanager.repository.StudentRepository;
+import gourav.springboot.studentdetailsmanager.request.CreateStudentRequest;
 import gourav.springboot.studentdetailsmanager.response.StudentResponse;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,20 @@ public class StudentService {
     public StudentService(StudentRepository studentRepository, AddressService addressService) {
         this.studentRepository = studentRepository;
         this.addressService = addressService;
+    }
+
+    public StudentResponse createStudent(CreateStudentRequest createStudentRequest) {
+        final Address address = addressService.createAddress(createStudentRequest.getStreet(), createStudentRequest.getCity());
+
+        Student student = new Student(
+                createStudentRequest.getFirstName(),
+                createStudentRequest.getLastName(),
+                createStudentRequest.getEmail(),
+                address.getId()
+        );
+        student = studentRepository.save(student);
+
+        return getStudentResponse(student, address);
     }
 
     public StudentResponse getStudent(int studentId) {
