@@ -2,6 +2,7 @@ package gourav.springboot.studentdetailsmanager.service;
 
 import gourav.springboot.studentdetailsmanager.model.Address;
 import gourav.springboot.studentdetailsmanager.repository.AddressRepository;
+import gourav.springboot.studentdetailsmanager.request.CreateAddressRequest;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -13,8 +14,8 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Address createAddress(String street, String city) {
-        final Address address = new Address(street, city);
+    public Address createAddress(CreateAddressRequest createAddressRequest) {
+        final Address address = new Address(createAddressRequest.getStreet(), createAddressRequest.getCity());
         return addressRepository.save(address);
     }
 

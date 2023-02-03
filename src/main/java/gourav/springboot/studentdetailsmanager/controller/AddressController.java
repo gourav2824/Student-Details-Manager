@@ -21,7 +21,7 @@ public class AddressController {
 
     @PostMapping("/create")
     public Address createAddress(@RequestBody CreateAddressRequest createAddressRequest) {
-        return addressService.createAddress(createAddressRequest.getStreet(), createAddressRequest.getCity());
+        return addressService.createAddress(createAddressRequest);
     }
 
     @GetMapping("/{id}")
