@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +31,7 @@ class AddressServiceTest {
     }
 
     @Test
-    void shouldBeAbleToCreateAddress() {
+    void testCreateAddress() {
         final Address address = new Address("New Street", "New Delhi");
         when(addressRepository.save(any(Address.class))).thenReturn(address);
 
@@ -40,6 +42,21 @@ class AddressServiceTest {
         assertThat(actualAddress.getId()).isNull();
         assertThat(actualAddress.getStreet()).isEqualTo(createAddressRequest.getStreet());
         assertThat(actualAddress.getCity()).isEqualTo(createAddressRequest.getCity());
+    }
+
+    @Test
+    void testCreateAddressUsingMockConstruction() {
+        final Address expectedAddress = new Address("New Street", "New Delhi");
+
+        try (final MockedConstruction<Address> ignored = mockConstruction(Address.class,
+                (mockedAddress, context) -> when(addressRepository.save(mockedAddress)).thenReturn(expectedAddress))) {
+            final CreateAddressRequest createAddressRequest = new CreateAddressRequest(expectedAddress.getStreet(), expectedAddress.getCity());
+
+            final Address actualAddress = addressService.createAddress(createAddressRequest);
+
+            assertThat(actualAddress.getStreet()).isEqualTo(createAddressRequest.getStreet());
+            assertThat(actualAddress.getCity()).isEqualTo(createAddressRequest.getCity());
+        }
     }
 
     @Test
