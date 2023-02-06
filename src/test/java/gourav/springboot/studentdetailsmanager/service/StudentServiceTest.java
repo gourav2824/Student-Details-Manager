@@ -24,41 +24,49 @@ class StudentServiceTest {
     private static final int ADDRESS_ID = 10;
 
     @Mock
-    private Student student;
-    @Mock
-    private Address address;
-    @Mock
     private StudentRepository studentRepository;
     @Mock
     private AddressService addressService;
 
     private StudentService studentService;
+    private Student student;
+    private Address address;
 
     @BeforeEach
     void setUp() {
         studentService = new StudentService(studentRepository, addressService);
+        address = new Address("New Street", "New York");
+        address.setId(ADDRESS_ID);
+        student = new Student("John", "Wick", "john.wick@mail.com", ADDRESS_ID);
+        student.setId(STUDENT_ID);
     }
 
     @Test
-    void shouldBeAbleToGetStudent() {
-        when(student.getId()).thenReturn(STUDENT_ID);
-        when(student.getAddressId()).thenReturn(ADDRESS_ID);
+    void testGetStudent() {
         when(studentRepository.findById(STUDENT_ID)).thenReturn(Optional.of(student));
         when(addressService.getAddress(ADDRESS_ID)).thenReturn(address);
 
         final StudentResponse studentResponse = studentService.getStudent(STUDENT_ID);
 
-        assertThat(studentResponse.getId()).isEqualTo(STUDENT_ID);
+        assertStudentResponse(studentResponse);
     }
 
     @Test
-    void shouldBeAbleToCreateStudent() {
-        when(student.getId()).thenReturn(STUDENT_ID);
+    void testCreateStudent() {
         when(addressService.createAddress(any(CreateAddressRequest.class))).thenReturn(address);
         when(studentRepository.save(any(Student.class))).thenReturn(student);
 
         final StudentResponse studentResponse = studentService.createStudent(new CreateStudentRequest());
 
+        assertStudentResponse(studentResponse);
+    }
+
+    private void assertStudentResponse(StudentResponse studentResponse) {
         assertThat(studentResponse.getId()).isEqualTo(STUDENT_ID);
+        assertThat(studentResponse.getFirstName()).isEqualTo(student.getFirstName());
+        assertThat(studentResponse.getLastName()).isEqualTo(student.getLastName());
+        assertThat(studentResponse.getEmail()).isEqualTo(student.getEmail());
+        assertThat(studentResponse.getStreet()).isEqualTo(address.getStreet());
+        assertThat(studentResponse.getCity()).isEqualTo(address.getCity());
     }
 }
