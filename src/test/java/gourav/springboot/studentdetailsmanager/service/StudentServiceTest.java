@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
+    private static final int STUDENT_ID = 1;
+    private static final int ADDRESS_ID = 10;
 
     @Mock
     private Student student;
@@ -39,26 +41,24 @@ class StudentServiceTest {
 
     @Test
     void shouldBeAbleToGetStudent() {
-        final int studentId = 1, addressId = 10;
-        when(student.getId()).thenReturn(studentId);
-        when(student.getAddressId()).thenReturn(addressId);
-        when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
-        when(addressService.getAddress(addressId)).thenReturn(address);
+        when(student.getId()).thenReturn(STUDENT_ID);
+        when(student.getAddressId()).thenReturn(ADDRESS_ID);
+        when(studentRepository.findById(STUDENT_ID)).thenReturn(Optional.of(student));
+        when(addressService.getAddress(ADDRESS_ID)).thenReturn(address);
 
-        final StudentResponse studentResponse = studentService.getStudent(studentId);
+        final StudentResponse studentResponse = studentService.getStudent(STUDENT_ID);
 
-        assertThat(studentResponse.getId()).isEqualTo(studentId);
+        assertThat(studentResponse.getId()).isEqualTo(STUDENT_ID);
     }
 
     @Test
     void shouldBeAbleToCreateStudent() {
-        final int studentId = 1;
-        when(student.getId()).thenReturn(studentId);
+        when(student.getId()).thenReturn(STUDENT_ID);
         when(addressService.createAddress(any(CreateAddressRequest.class))).thenReturn(address);
         when(studentRepository.save(any(Student.class))).thenReturn(student);
 
         final StudentResponse studentResponse = studentService.createStudent(new CreateStudentRequest());
 
-        assertThat(studentResponse.getId()).isEqualTo(studentId);
+        assertThat(studentResponse.getId()).isEqualTo(STUDENT_ID);
     }
 }
